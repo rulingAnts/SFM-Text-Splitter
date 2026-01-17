@@ -46,11 +46,10 @@ def load_config(config_path: Optional[str]) -> MarkerConfig:
         return MarkerConfig()
 
 
-def run_cli(input_path: Optional[str], output_dir: Optional[str], strict: bool, ext: str, encoding: Optional[str], config_path: Optional[str], configure_ui: bool, headless: bool) -> int:
-    # Initial GUI prompt: strict/loose and configure markers
+def run_cli(input_path: Optional[str], output_dir: Optional[str], strict: bool, ext: str, encoding: Optional[str], config_path: Optional[str], headless: bool) -> int:
+    # Initial GUI prompt: strict/loose (no custom marker configuration in current version)
     if TK_AVAILABLE and not headless:
-        # Show a small dialog asking for mode and configuration desire
-        strict, configure_ui = initial_prompt_gui(default_strict=strict, default_configure=configure_ui)
+        strict = initial_prompt_gui(default_strict=strict)
 
     # Resolve input/output via GUI if missing; no interactive CLI prompts
     if TK_AVAILABLE and not headless:
@@ -92,10 +91,8 @@ def run_cli(input_path: Optional[str], output_dir: Optional[str], strict: bool, 
             print("ERROR: Output folder must be empty.", file=sys.stderr)
             return 3
 
-    # Optionally configure markers
+    # Load default or JSON-provided markers (no UI configuration)
     cfg = load_config(config_path)
-    if configure_ui and TK_AVAILABLE and not headless:
-        cfg = configure_markers_ui(cfg)
 
     # Read input preserving encoding/newlines
     lines, newline_style, enc_detected = read_text_preserve(input_path)
@@ -133,28 +130,24 @@ def run_cli(input_path: Optional[str], output_dir: Optional[str], strict: bool, 
     return 0
 
 
-def initial_prompt_gui(default_strict: bool = True, default_configure: bool = False) -> tuple[bool, bool]:
+def initial_prompt_gui(default_strict: bool = True) -> bool:
     root = tk.Tk(); root.title("SFM Splitter Setup")
     strict_var = tk.BooleanVar(value=default_strict)
-    config_var = tk.BooleanVar(value=default_configure)
 
-    ttk.Label(root, text="Choose mode and configuration:").pack(anchor="w", padx=10, pady=(10,4))
+    ttk.Label(root, text="Choose mode:").pack(anchor="w", padx=10, pady=(10,4))
     mode_frame = ttk.Frame(root); mode_frame.pack(fill="x", padx=10)
     ttk.Radiobutton(mode_frame, text="Strict (default)", variable=strict_var, value=True).pack(side="left")
     ttk.Radiobutton(mode_frame, text="Loose", variable=strict_var, value=False).pack(side="left")
 
-    ttk.Checkbutton(root, text="Configure markers before running", variable=config_var).pack(anchor="w", padx=10, pady=8)
-
-    result = {"strict": default_strict, "configure": default_configure}
+    result = {"strict": default_strict}
 
     def on_ok():
         result["strict"] = bool(strict_var.get())
-        result["configure"] = bool(config_var.get())
         root.destroy()
 
     ttk.Button(root, text="Continue", command=on_ok).pack(pady=10)
     root.mainloop()
-    return result["strict"], result["configure"]
+    return result["strict"]
 
 
 def choose_paths_gui(input_path: Optional[str], output_dir: Optional[str]) -> tuple[Optional[str], Optional[str]]:
@@ -257,7 +250,6 @@ def build_arg_parser() -> argparse.ArgumentParser:
     p.add_argument("output", nargs="?", help="Output folder (must be empty)")
     p.add_argument("--strict", action="store_true", help="Strict mode (default): start markers only")
     p.add_argument("--loose", action="store_true", help="Loose mode: allow blank-line/content heuristics")
-    p.add_argument("--configure", action="store_true", help="Open marker configuration UI")
     p.add_argument("--cli", action="store_true", help="Run without GUI dialogs")
     p.add_argument("--extension", default=".txt", help="Output extension (default .txt)")
     p.add_argument("--encoding", default=None, help="Force input/output encoding (default: auto)")
@@ -278,7 +270,6 @@ def main(argv: Optional[list[str]] = None) -> int:
         ext=args.extension,
         encoding=args.encoding,
         config_path=args.config,
-        configure_ui=args.configure,
         headless=args.cli,
     )
     return code

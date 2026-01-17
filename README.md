@@ -3,7 +3,6 @@
 Split multi-text SFM (Toolbox/Shoebox) files into one file per text.
 
 - Default mode: strict (new text starts on any of `\no`, `\id`, `\t`, `\te`, `\a`).
-- Optional marker configuration UI (Tkinter) to customize metadata/content markers.
 - Preserves original encoding and newline style; default output extension `.txt` (configurable).
 - Output folder must be empty.
 
@@ -26,18 +25,17 @@ python -m scripts.split_sfm \
   --extension .txt
 ```
 
-If you omit the input or output path, Tk file open / directory select dialogs will prompt you (when Tkinter is available). Add `--configure` to open the marker configuration UI.
+If you omit the input or output path, Tk file open / directory select dialogs will prompt you (when Tkinter is available).
 
 ### Options
 
 - `--strict` (default) or `--loose`
-- `--configure` open marker configuration dialog (Tk)
 - `--cli` force non-GUI prompts
 - `--extension .txt` output file extension
 - `--encoding utf-8` force encoding (otherwise auto-detected)
 - `--config markers.json` load marker configuration from JSON
 
-## Marker configuration JSON
+## Marker configuration JSON (advanced)
 
 ```json
 {
