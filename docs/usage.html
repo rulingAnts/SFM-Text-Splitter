@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Usage · SFM Text Splitter</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1>Usage</h1>
+      <p class="subtitle">How to run the splitter and prepare files for FLEx.</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section>
+      <h2>GUI (Recommended)</h2>
+      <ol>
+        <li>Launch the app (Windows portable EXE or Python script).</li>
+        <li>Choose <em>Strict</em> or <em>Loose</em> mode.</li>
+        <li>Select your input SFM/text file.</li>
+        <li>Select an <strong>EMPTY</strong> output folder.</li>
+        <li>The app writes one file per interlinear text, opens the folder, and shows a success dialog.</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>CLI</h2>
+      <pre><code>python -m scripts.split_sfm \
+  "/path/to/input.sfm" \
+  "/path/to/empty-output-folder" \
+  --extension .txt
+</code></pre>
+      <ul>
+        <li><code>--strict</code> (default) or <code>--loose</code></li>
+        <li><code>--cli</code> run without GUI dialogs</li>
+        <li><code>--extension .txt</code> output file extension</li>
+        <li><code>--encoding utf-8</code> force encoding</li>
+        <li><code>--config markers.json</code> load marker configuration from JSON</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Marker Configuration (Advanced)</h2>
+      <p>Supply a JSON file to customize markers:</p>
+      <pre><code>{
+  "start_markers": ["no","id","t","te","a"],
+  "metadata_markers": ["no","id","t","te","a","so","genre","com","arg","mkr"],
+  "content_markers": ["tx","gl","ft","fte","d","dsseg","mb","ph"],
+  "priority_order": ["te","t"],
+  "join_authors_with": "-"
+}
+</code></pre>
+    </section>
+
+    <section>
+      <p><a class="btn" href="index.html">Back to Home</a></p>
+      <p class="license">AGPL-3.0 — see <a href="../LICENSE">LICENSE</a>.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <small>&copy; 2026 Seth Johnston</small>
+    </div>
+  </footer>
+</body>
+</html>

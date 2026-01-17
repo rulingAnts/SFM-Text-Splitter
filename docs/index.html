@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SFM Text Splitter</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1>SFM Text Splitter</h1>
+      <p class="subtitle">Split multi-text SFM (Toolbox/Shoebox) files into individual interlinear texts for FLEx import.</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="actions">
+        <a id="download-btn" class="btn btn-primary btn-lg" href="#" download>
+          Download Latest (Windows Portable ZIP)
+        </a>
+        <span id="download-status" class="status"></span>
+      </div>
+      <p class="note">Fetches the latest release asset named "SFM Text Splitter.zip".</p>
+    </section>
+
+    <section>
+      <h2>Purpose</h2>
+      <p>
+        FieldWorks Language Explorer (FLEx) cannot import multiple interlinear texts from a single file.
+        This tool takes a single SFM format file containing multiple interlinear texts and splits it into
+        separate files—one per interlinear text—ready for FLEx import.
+      </p>
+    </section>
+
+    <section>
+      <h2>Quick Start</h2>
+      <ol>
+        <li>Download and unzip the Windows portable build.</li>
+        <li>Run the app and choose Strict or Loose mode.</li>
+        <li>Select your input SFM/text file.</li>
+        <li>Select an <strong>EMPTY</strong> output folder.</li>
+        <li>On success, the app opens the output folder and shows a completion dialog.</li>
+      </ol>
+      <p><a class="btn" href="usage.html">Detailed Usage</a></p>
+    </section>
+
+    <section>
+      <h2>Attribution</h2>
+      <ul>
+        <li><strong>Author:</strong> Seth Johnston</li>
+        <li><strong>Assistant:</strong> GitHub Copilot (AI programming assistant)</li>
+      </ul>
+      <p class="license">AGPL-3.0 — see <a href="../LICENSE">LICENSE</a>.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <small>&copy; 2026 Seth Johnston</small>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
