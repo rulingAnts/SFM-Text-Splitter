@@ -1,0 +1,3 @@
+charset-normalizer>=3.0.0
+# chardet is optional fallback; install if needed
+# chardet>=5.0.0
