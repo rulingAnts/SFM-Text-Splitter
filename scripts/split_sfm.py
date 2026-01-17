@@ -5,6 +5,7 @@ import argparse
 import json
 import os
 import sys
+import subprocess
 from typing import Optional
 
 # Tkinter optional
@@ -112,6 +113,8 @@ def run_cli(input_path: Optional[str], output_dir: Optional[str], strict: bool, 
         print(f"WARN: {w}", file=sys.stderr)
     if not slices:
         print("ERROR: No texts found; adjust markers or use --loose.", file=sys.stderr)
+        if TK_AVAILABLE and not headless:
+            messagebox.showerror("No texts found", "No texts were detected with the current markers. Try Loose mode or adjust markers via JSON config.")
         return 5
 
     # Write outputs
@@ -135,7 +138,29 @@ def run_cli(input_path: Optional[str], output_dir: Optional[str], strict: bool, 
         count += 1
 
     print(f"INFO: Wrote {count} texts to {output_dir}")
+    if TK_AVAILABLE and not headless:
+        try:
+            messagebox.showinfo("Done", f"Wrote {count} texts to:\n{output_dir}")
+        except Exception:
+            pass
+        try:
+            open_folder_in_os(output_dir)
+        except Exception:
+            pass
     return 0
+
+
+def open_folder_in_os(path: str) -> None:
+    try:
+        if sys.platform.startswith('win'):
+            os.startfile(path)  # type: ignore[attr-defined]
+        elif sys.platform == 'darwin':
+            subprocess.run(['open', path], check=False)
+        else:
+            subprocess.run(['xdg-open', path], check=False)
+    except Exception:
+        # Silently ignore if we can't launch the folder
+        pass
 
 
 def initial_prompt_gui(default_strict: bool = True) -> bool:
