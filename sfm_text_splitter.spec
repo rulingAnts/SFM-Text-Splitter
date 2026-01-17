@@ -4,7 +4,7 @@ block_cipher = None
 
 a = Analysis(
     ['scripts/split_sfm.py'],
-    pathex=[],
+    pathex=['.'],
     binaries=[],
     datas=[],
     hiddenimports=['tkinter'],

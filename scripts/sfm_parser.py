@@ -5,10 +5,14 @@ import re
 from dataclasses import dataclass
 from typing import List, Optional, Tuple
 
+# Robust import so it works under PyInstaller, module, and script modes
 try:
-    from .marker_config import MarkerConfig
-except ImportError:
-    from marker_config import MarkerConfig
+    from scripts.marker_config import MarkerConfig
+except Exception:
+    try:
+        from marker_config import MarkerConfig
+    except Exception:
+        from .marker_config import MarkerConfig
 
 _marker_re = re.compile(r"^\\([A-Za-z0-9]+)(?:\s+|$)")
 

@@ -15,18 +15,26 @@ try:
 except Exception:
     TK_AVAILABLE = False
 
+# Robust imports to work in: module mode, script mode, and PyInstaller
 try:
-    # When executed as a module (python -m scripts.split_sfm)
-    from .marker_config import MarkerConfig
-    from .sfm_parser import parse_and_split
-    from .io_utils import read_text_preserve, write_lines_preserve
-    from .filename_utils import make_filename, dedupe_filename
-except ImportError:
-    # Fallback for direct script execution from the 'scripts' folder
-    from marker_config import MarkerConfig
-    from sfm_parser import parse_and_split
-    from io_utils import read_text_preserve, write_lines_preserve
-    from filename_utils import make_filename, dedupe_filename
+    # Preferred: import as a package (works in PyInstaller, and when run from repo root)
+    from scripts.marker_config import MarkerConfig
+    from scripts.sfm_parser import parse_and_split
+    from scripts.io_utils import read_text_preserve, write_lines_preserve
+    from scripts.filename_utils import make_filename, dedupe_filename
+except Exception:
+    try:
+        # Fallback: same directory imports (when running directly from scripts folder)
+        from marker_config import MarkerConfig
+        from sfm_parser import parse_and_split
+        from io_utils import read_text_preserve, write_lines_preserve
+        from filename_utils import make_filename, dedupe_filename
+    except Exception:
+        # Last resort: relative imports when executed as module (python -m scripts.split_sfm)
+        from .marker_config import MarkerConfig
+        from .sfm_parser import parse_and_split
+        from .io_utils import read_text_preserve, write_lines_preserve
+        from .filename_utils import make_filename, dedupe_filename
 
 
 def ensure_empty_dir(path: str) -> bool:
