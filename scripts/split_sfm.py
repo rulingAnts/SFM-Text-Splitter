@@ -8,13 +8,20 @@ import sys
 import subprocess
 from typing import Optional
 
-# Tkinter optional
+# Tkinter optional (legacy UI)
 try:
     import tkinter as tk
     from tkinter import filedialog, messagebox, ttk
     TK_AVAILABLE = True
 except Exception:
     TK_AVAILABLE = False
+
+# Toga optional (new UI)
+try:
+    from sfm_text_splitter.app import main as toga_main  # type: ignore
+    TOGA_AVAILABLE = True
+except Exception:
+    TOGA_AVAILABLE = False
 
 # Robust imports to work in: module mode, script mode, and PyInstaller
 try:
@@ -57,6 +64,16 @@ def load_config(config_path: Optional[str]) -> MarkerConfig:
 
 def run_cli(input_path: Optional[str], output_dir: Optional[str], strict: bool, ext: str, encoding: Optional[str], config_path: Optional[str], headless: bool) -> int:
     # Initial GUI prompt: strict/loose (no custom marker configuration in current version)
+    if TOGA_AVAILABLE and not headless:
+        # Launch Toga UI entry if available
+        try:
+            app = toga_main()
+            app.main_loop()
+            return 0
+        except Exception:
+            # Fallback to tkinter dialogs
+            pass
+
     if TK_AVAILABLE and not headless:
         strict = initial_prompt_gui(default_strict=strict)
 

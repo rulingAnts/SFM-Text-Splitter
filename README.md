@@ -72,3 +72,39 @@ This produces a portable, windowed, onefile EXE at `dist\SFM Text Splitter.exe` 
 ## License
 
 AGPL-3.0 — see [LICENSE](LICENSE).
+
+## Toga GUI and Briefcase Packaging
+
+The app now includes a Toga-based GUI and Briefcase packaging in addition to the legacy Tk dialogs.
+
+### Run the Toga GUI (macOS)
+
+1. Create a virtual environment and install requirements:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+2. Launch the app:
+
+```bash
+python -m sfm_text_splitter.app
+```
+
+The UI lets you select Strict/Loose mode, an input SFM file, and an empty output folder. Optionally provide a JSON marker config.
+
+### Briefcase packaging
+
+Briefcase configuration is defined in `pyproject.toml`.
+
+Build for your platform:
+
+```bash
+briefcase create
+briefcase build
+briefcase package
+```
+
+Platform-specific Toga backends are declared in `pyproject.toml` (Cocoa for macOS, WinForms for Windows, GTK for Linux).

@@ -1,0 +1,31 @@
+[tool.briefcase]
+project_name = "SFM Text Splitter"
+bundle = "com.rulingants"
+version = "0.1.0"
+url = "https://github.com/rulingAnts/SFM-Text-Splitter"
+license = "AGPL-3.0-or-later"
+author = "rulingAnts"
+
+[tool.briefcase.app.sfm_text_splitter]
+formal_name = "SFM Text Splitter"
+bundle = "com.rulingants"
+version = "0.1.0"
+description = "Split multi-text SFM files into individual files."
+sources = ["src/sfm_text_splitter"]
+requires = [
+    "charset-normalizer>=3.0.0",
+    "toga-core>=0.4.0",
+]
+icon = "AppIcon.appiconset/appstore1024.png"
+
+[tool.briefcase.app.sfm_text_splitter.macOS]
+requires = ["toga-cocoa>=0.4.0"]
+icon = "AppIcon.appiconset/mac512.png"
+
+[tool.briefcase.app.sfm_text_splitter.windows]
+requires = ["toga-winforms>=0.4.0"]
+icon = "assets/appicon.ico"
+
+[tool.briefcase.app.sfm_text_splitter.linux]
+requires = ["toga-gtk>=0.4.0"]
+icon = "assets/appicon.png"

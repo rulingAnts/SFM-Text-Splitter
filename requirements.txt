@@ -1,3 +1,12 @@
 charset-normalizer>=3.0.0
+
+# GUI framework (Toga core + platform backends)
+toga-core>=0.4.0
+toga-cocoa>=0.4.0; sys_platform == "darwin"
+toga-gtk>=0.4.0; sys_platform == "linux"
+toga-winforms>=0.4.0; sys_platform == "win32"
+
+# Packaging (Briefcase)
+briefcase>=0.3.20
 # chardet is optional fallback; install if needed
 # chardet>=5.0.0
