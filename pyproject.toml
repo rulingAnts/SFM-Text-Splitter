@@ -1,10 +1,29 @@
+[build-system]
+requires = ["setuptools>=65", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sfm-text-splitter"
+version = "0.1.0"
+description = "Split multi-text SFM files into individual files using a Toga GUI"
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [{name = "rulingAnts"}]
+dependencies = [
+    "charset-normalizer>=3.0.0",
+    "toga-core>=0.4.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
 [tool.briefcase]
 project_name = "SFM Text Splitter"
 bundle = "com.rulingants"
 version = "0.1.0"
 url = "https://github.com/rulingAnts/SFM-Text-Splitter"
 license = "AGPL-3.0-or-later"
-author = "rulingAnts"
+author = "Seth Johnston"
 
 [tool.briefcase.app.sfm_text_splitter]
 formal_name = "SFM Text Splitter"

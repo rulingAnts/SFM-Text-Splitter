@@ -1,0 +1,10 @@
+LICENSE
+README.md
+pyproject.toml
+src/sfm_text_splitter/__init__.py
+src/sfm_text_splitter/app.py
+src/sfm_text_splitter.egg-info/PKG-INFO
+src/sfm_text_splitter.egg-info/SOURCES.txt
+src/sfm_text_splitter.egg-info/dependency_links.txt
+src/sfm_text_splitter.egg-info/requires.txt
+src/sfm_text_splitter.egg-info/top_level.txt

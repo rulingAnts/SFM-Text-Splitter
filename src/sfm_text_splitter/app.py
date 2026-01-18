@@ -51,8 +51,9 @@ class SFMTextSplitterApp(toga.App):
 
         # Controls
         mode_label = toga.Label("Mode")
-        self.mode_select = toga.Selection(items=["Strict", "Loose"], on_select=self.on_mode_select)
+        self.mode_select = toga.Selection(items=["Strict", "Loose"])  # Toga 0.5: assign handlers after init
         self.mode_select.value = "Strict"
+        self.mode_select.on_select = self.on_mode_select
 
         input_label = toga.Label("Input SFM file")
         self.input_value = toga.Label("None selected", style=Pack(color="#666"))
@@ -88,48 +89,66 @@ class SFMTextSplitterApp(toga.App):
     def on_mode_select(self, widget):
         self.strict = (widget.value == "Strict")
 
-    async def on_select_input(self, widget):
+    async def on_select_input(self, widget, **kwargs):
         try:
-            path = await self.main_window.open_file_dialog("Choose SFM input file", file_types=["txt", "sfm", "*"], multiselect=False)
+            dlg = toga.OpenFileDialog("Choose SFM input file", multiple_select=False)
+            result = await self.main_window.dialog(dlg)
         except Exception:
-            path = None
+            result = None
+        path = None
+        if isinstance(result, list):
+            path = str(result[0]) if result else None
+        elif result:
+            path = str(result)
         if path:
             self.input_path = path
             self.input_value.text = path
 
-    async def on_select_output(self, widget):
+    async def on_select_output(self, widget, **kwargs):
         try:
-            folder = await self.main_window.open_folder_dialog("Choose EMPTY output folder")
+            dlg = toga.SelectFolderDialog("Choose EMPTY output folder", multiple_select=False)
+            result = await self.main_window.dialog(dlg)
         except Exception:
-            folder = None
+            result = None
+        folder = None
+        if isinstance(result, list):
+            folder = str(result[0]) if result else None
+        elif result:
+            folder = str(result)
         if folder:
             if not os.path.isdir(folder):
-                await self.main_window.error_dialog("Invalid output folder", "Output folder must exist and be empty.")
+                await self.main_window.dialog(toga.ErrorDialog("Invalid output folder", "Output folder must exist and be empty."))
                 return
             if not ensure_empty_dir(folder):
-                await self.main_window.error_dialog("Invalid output folder", "Output folder must be empty.")
+                await self.main_window.dialog(toga.ErrorDialog("Invalid output folder", "Output folder must be empty."))
                 return
             self.output_dir = folder
             self.output_value.text = folder
 
-    async def on_select_config(self, widget):
+    async def on_select_config(self, widget, **kwargs):
         try:
-            path = await self.main_window.open_file_dialog("Choose JSON marker config", file_types=["json", "*"], multiselect=False)
+            dlg = toga.OpenFileDialog("Choose JSON marker config", multiple_select=False)
+            result = await self.main_window.dialog(dlg)
         except Exception:
-            path = None
+            result = None
+        path = None
+        if isinstance(result, list):
+            path = str(result[0]) if result else None
+        elif result:
+            path = str(result)
         if path:
             self.config_path = path
             self.config_value.text = path
 
     async def on_run_split(self, widget):
         if not self.input_path or not os.path.isfile(self.input_path):
-            await self.main_window.error_dialog("Invalid input", "Please select a valid input file.")
+            await self.main_window.dialog(toga.ErrorDialog("Invalid input", "Please select a valid input file."))
             return
         if not self.output_dir or not os.path.isdir(self.output_dir):
-            await self.main_window.error_dialog("Invalid output folder", "Please select an existing, empty output folder.")
+            await self.main_window.dialog(toga.ErrorDialog("Invalid output folder", "Please select an existing, empty output folder."))
             return
         if not ensure_empty_dir(self.output_dir):
-            await self.main_window.error_dialog("Invalid output folder", "Output folder must be empty.")
+            await self.main_window.dialog(toga.ErrorDialog("Invalid output folder", "Output folder must be empty."))
             return
 
         # Load config
@@ -155,7 +174,7 @@ class SFMTextSplitterApp(toga.App):
             # Show warnings inline but don't interrupt flow
             self.status.text = "\n".join([f"WARN: {w}" for w in warnings])
         if not slices:
-            await self.main_window.error_dialog("No texts found", "No texts were detected with the current markers. Try Loose mode or adjust markers via JSON config.")
+            await self.main_window.dialog(toga.ErrorDialog("No texts found", "No texts were detected with the current markers. Try Loose mode or adjust markers via JSON config."))
             return
 
         # Write outputs
@@ -179,7 +198,7 @@ class SFMTextSplitterApp(toga.App):
 
         self.status.text = f"Wrote {count} texts to {self.output_dir}"
         try:
-            await self.main_window.info_dialog("Done", f"Wrote {count} texts to:\n{self.output_dir}")
+            await self.main_window.dialog(toga.InfoDialog("Done", f"Wrote {count} texts to:\n{self.output_dir}"))
         except Exception:
             pass
         try:

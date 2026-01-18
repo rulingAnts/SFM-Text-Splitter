@@ -1,0 +1,2 @@
+charset-normalizer>=3.0.0
+toga-core>=0.4.0
